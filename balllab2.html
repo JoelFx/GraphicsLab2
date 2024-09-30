@@ -1,20 +1,118 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Canvas</title>
-    <!-- Heading for the webpage, replace 'Your Name' with your name or another title -->
-    <h1>Joel John</h1><br>
+<head>
+<meta charset="UTF-8">
+<title>Canvas</title>
+<!-- Heading for the webpage, replace 'Your Name' with your name or another title -->
+<h1>Joel John</h1><br>
 
-    <style type="text/css">
-      /* Style for the body: Set the background color to white */
-      body {
-          background-color: white;
+<style type="text/css">
+/* Style for the body: Set the background color to white */
+body {
+background-color: white;
+}
+/* Style for the canvas: Add a black border */
+canvas {
+border: solid black;
+}
+</style>
+</head>
+<body>
+
+    // Initial ball position and speed
+    var x = 250; // x-coordinate
+    var y = 90;  // y-coordinate
+    var r = 10;  // radius of the ball
+    var speedX = 1.5; // horizontal speed
+    var speedY = 1.5; // vertical speed
+
+    // Function to move the ball horizontally
+    function horizontal() {
+      // Start drawing the ball
+      ctx.beginPath();
+      // Draw a red ball at the current x, y position
+      ctx.arc(x, y, r, 0, 2 * Math.PI);
+      ctx.fillStyle = "red";
+      ctx.fill();
+      ctx.stroke();
+
+      // Update the horizontal position (move the ball)
+      x += speedX;
+
+      // Check if the ball hits the right or left edge of the canvas
+      if (x + canvas.clientWidth > window.innerWidth || x < 0) {
+        // Reverse the ball's horizontal direction
+        speedX = -speedX;
+        canvas.style.left = x;
       }
-      /* Style for the canvas: Add a black border */
-      canvas {
-        border: solid black;
+
+      // Continue the animation
+      window.requestAnimationFrame(horizontal);
+    }
+
+    // Function to move the ball vertically
+    function vertical() {
+      // Start drawing the ball
+      ctx.beginPath();
+      // Draw the ball
+      ctx.arc(x, y, r, 0, 2 * Math.PI);
+      ctx.fillStyle = "red";
+      ctx.fill();
+      ctx.stroke();
+
+      // Update the vertical position (move the ball)
+      y += speedY;
+
+      // Check if the ball hits the top or bottom edge of the canvas
+      if (y + canvas.clientHeight > window.innerHeight || y < 0) {
+        // Reverse the ball's vertical direction
+        speedY = -speedY;
+        canvas.style.top = y;
       }
-    </style>
-  </head>
-  <body>
+
+      // Continue the animation
+      window.requestAnimationFrame(vertical);
+    }
+
+    // Function to move the ball both horizontally and vertically
+    function both() {
+      // Start drawing the ball
+      ctx.beginPath();
+      // Draw the ball
+      ctx.arc(x, y, r, 0, 2 * Math.PI);
+      ctx.fillStyle = "red";
+      ctx.fill();
+      ctx.stroke();
+
+      // Update both x and y positions (move the ball diagonally)
+      x += speedX;
+      y += speedY;
+
+      // Check if the ball hits the left/right edge
+      if (x + canvas.clientWidth > window.innerWidth || x < 0) {
+        speedX = -speedX; // Reverse horizontal direction
+      }
+
+      // Check if the ball hits the top/bottom edge
+      if (y + canvas.clientHeight > window.innerHeight || y < 0) {
+        speedY = -speedY; // Reverse vertical direction
+      }
+
+      // Update the canvas position
+      canvas.style.left = x;
+      canvas.style.top = y;
+
+      // Continue the animation
+      window.requestAnimationFrame(both);
+    }
+
+    /*
+    // Example usage of the Ball class:
+    // Create a ball instance and move it horizontally
+    const m = new Ball(250, 90, 10);
+    m.draw();
+    m.moved(1); 
+    */
+
+
+

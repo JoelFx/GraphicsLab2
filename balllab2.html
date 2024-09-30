@@ -1,47 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Canvas</title>
-<!-- Heading for the webpage, replace 'Your Name' with your name or another title -->
-<h1>Joel John</h1><br>
-
-<style type="text/css">
-/* Style for the body: Set the background color to white */
-body {
-background-color: white;
-}
-/* Style for the canvas: Add a black border */
-canvas {
-border: solid black;
-}
-</style>
+    <meta charset="UTF-8">
+    <title>Canvas</title>
+    <style type="text/css">
+        body {
+            background-color: white;
+        }
+        #canvas-for-ball {
+            border: 2px solid black;
+        }
+    </style>
 </head>
 <body>
 
-<!-- The canvas where the ball and animations will be drawn -->
-<canvas id="canvas-for-ball" height="405" width="765"></canvas>
-
-<script type="text/javascript">
-// Get a reference to the canvas element
-var canvas = document.getElementById("canvas-for-ball");
-// Get a 2D drawing context from the canvas
-var ctx = canvas.getContext("2d");
-
-// Set the scaling factors for the canvas (1.5x horizontally, 2.1x vertically)
-ctx.scale(1.5, 2.1);
-// Set the canvas background color to black
-ctx.fillStyle = "black";
-// Fill the rectangle with the specified dimensions
-ctx.fillRect(0, 0, 515, 370);
-// Clear a portion of the canvas to create an empty area
-ctx.clearRect(1, 1, 510, 220);
-
-// Ball class to handle ball properties and movement
-class Ball {
-  constructor(x, y, r) {
-    // Ball's x and y position, and its radius
-    this.x = x;
-    this.y = y;
-    this.r = r;
-  }
+<h1>Joel John</h1>

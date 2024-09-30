@@ -1,127 +1,120 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Canvas</title>
-<style type="text/css">
-body {
-    background-color: white;
-}
-#canvas-for-ball {
-    border: 2px solid black;
-}
+<title>Bouncing Ball Animation</title>
+<style>
+    body {
+        background-color: #d3d3d3; /* Similar to lightgray */
+    }
+    #ballCanvas {
+        border: 3px solid navy; /* Changed border color to navy */
+    }
 </style>
 </head>
 <body>
 
-<h1>Joel John</h1>
+<h1>Joel John's Canvas Animation</h1>
 
-<canvas id="canvas-for-ball" height="250" width="500"></canvas>
+<canvas id="ballCanvas" width="700" height="400"></canvas>
 
-<script type="text/javascript">
-// Get a handle to the canvas element
-var canvas = document.getElementById("canvas-for-ball");
-var ctx = canvas.getContext("2d");
+<script>
+// Accessing the canvas element and context
+const canvas = document.getElementById("ballCanvas");
+const ctx = canvas.getContext("2d");
 
-var yBorder = canvas.height;
-var xBorder = canvas.width;
+// Get canvas dimensions for boundary
+const canvasHeight = canvas.height;
+const canvasWidth = canvas.width;
 
-// Ball class and constructor
-class Ball {
-constructor(y, x, r, xv, yv) {
-    this.y = y; 
-    this.x = x; 
-    this.r = r; 
-    this.xv = xv; 
-    this.yv = yv; 
-    this.angle = 0; 
-    this.rotationSpeed = 0.1; 
-}
+// Ball class definition with modified logic
+class BouncingBall {
+    constructor(initX, initY, radius, velocityX, velocityY) {
+        this.x = initX;
+        this.y = initY;
+        this.radius = radius;
+        this.velX = velocityX;
+        this.velY = velocityY;
+        this.rotation = 0;
+        this.rotationIncrement = 0.15; // Adjusted rotation speed
+    }
 
-// Method to draw the ball
-draw(ctx) {
+    // Drawing the ball on the canvas
+    draw(context) {
+        context.save(); 
+        context.translate(this.x, this.y);
+        context.rotate(this.rotation);
 
-ctx.save();
+        context.beginPath();
+        context.arc(0, 0, this.radius, 0, Math.PI * 2);
+        context.lineWidth = 2;
+        context.strokeStyle = 'crimson'; // Changed color to crimson
+        context.stroke();
 
-ctx.translate(this.x, this.y); 
-ctx.rotate(this.angle); 
+        // Drawing inner lines for the ball design
+        context.beginPath();
+        context.moveTo(0, -this.radius);
+        context.lineTo(0, this.radius);
+        context.moveTo(this.radius, this.radius - 25);
+        context.lineTo(0, -10);
+        context.moveTo(-this.radius, this.radius - 25);
+        context.lineTo(0, -10);
+        context.stroke();
+        
+        context.restore();
+    }
 
-ctx.beginPath();
-ctx.arc(0, 0, this.r, 0, 2 * Math.PI); 
-ctx.stroke();
-
-// Draw lines from the center
-ctx.moveTo(0, -this.r);
-ctx.lineTo(0, this.r);
-ctx.stroke();
-
-ctx.moveTo(this.r, this.r - 20);
-ctx.lineTo(0, -5);
-ctx.stroke();
-
-ctx.moveTo(-this.r, this.r - 20);
-ctx.lineTo(0, -5);
-ctx.stroke();
-
-ctx.restore(); 
-}
-
-// Method to rotate the ball
-rotate() {
-        this.angle += this.rotationSpeed; 
-        if (this.angle >= 2 * Math.PI) { 
-            this.angle -= 2 * Math.PI;
+    // Ball rotation logic
+    spin() {
+        this.rotation += this.rotationIncrement;
+        if (this.rotation >= Math.PI * 2) {
+            this.rotation -= Math.PI * 2;
         }
     }
 
-    // Method to move the ball and handle border collisions
-    move() {
-        this.y += this.yv;
-        this.x += this.xv;
+    // Ball movement logic with boundary detection
+    updatePosition() {
+        this.x += this.velX;
+        this.y += this.velY;
 
-        // Check for collision with the bottom edge
-        if (this.y + this.r >= yBorder) {
-            this.yv *= -1; 
-            this.y = yBorder - this.r; 
-            this.rotationSpeed *= -1; 
+        // Boundary detection logic
+        if (this.y + this.radius >= canvasHeight) {
+            this.velY *= -1;
+            this.y = canvasHeight - this.radius;
+            this.rotationIncrement *= -1;
+        } else if (this.y - this.radius <= 0) {
+            this.velY *= -1;
+            this.y = this.radius;
+            this.rotationIncrement *= -1;
         }
 
-        // Check for collision with the top edge
-        if (this.y - this.r <= 0) {
-            this.yv *= -1; 
-            this.y = this.r; 
-            this.rotationSpeed *= -1; 
-        }
-
-        // Check for collision with the right edge
-        if (this.x + this.r >= xBorder) {
-            this.xv *= -1; 
-            this.x = xBorder - this.r; 
-            this.rotationSpeed *= -1; 
-        }
-
-        // Check for collision with the left edge
-        if (this.x - this.r <= 0) {
-            this.xv *= -1; 
-            this.x = this.r; 
-            this.rotationSpeed *= -1; 
+        if (this.x + this.radius >= canvasWidth) {
+            this.velX *= -1;
+            this.x = canvasWidth - this.radius;
+            this.rotationIncrement *= -1;
+        } else if (this.x - this.radius <= 0) {
+            this.velX *= -1;
+            this.x = this.radius;
+            this.rotationIncrement *= -1;
         }
     }
 }
 
-// Instance of the Ball class
-var b1 = new Ball(100, 50, 25, 2, 2); 
+// Ball instance with new parameters
+const ball = new BouncingBall(150, 100, 45, 5, 4); // Modified size and speed
 
-function repeatme() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
-  b1.rotate(); 
-  b1.draw(ctx); 
-  b1.move(); 
-  window.requestAnimationFrame(repeatme); // Request the next frame
+// Animation loop
+function startAnimation() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear canvas
+    ball.spin(); // Update rotation
+    ball.draw(ctx); // Draw the ball
+    ball.updatePosition(); // Update ball's position
+    requestAnimationFrame(startAnimation); // Request the next animation frame
 }
 
-// Start the animation loop
-repeatme();
+// Start the animation
+startAnimation();
+
 </script>
 </body>
 </html>

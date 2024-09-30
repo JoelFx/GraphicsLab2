@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <title>Canvas</title>
 <style type="text/css">
-    body {
-        background-color: white;
-    }
-    #canvas-for-ball {
-        border: 2px solid black;
-    }
+  body {
+      background-color: white;
+  }
+  #canvas-for-ball {
+      border: 2px solid black;
+  }
 </style>
 </head>
 <body>
@@ -28,18 +28,18 @@ var xBorder = canvas.width;
 
 // Ball class and constructor
 class Ball {
-    constructor(y, x, r, xv, yv) {
-        this.y = y; 
-        this.x = x; 
-        this.r = r; 
-        this.xv = xv; 
-        this.yv = yv; 
-        this.angle = 0; 
-        this.rotationSpeed = 0.1; 
-    }
+  constructor(y, x, r, xv, yv) {
+      this.y = y; 
+      this.x = x; 
+      this.r = r; 
+      this.xv = xv; 
+      this.yv = yv; 
+      this.angle = 0; 
+      this.rotationSpeed = 0.1; 
+  }
 
-    // Method to draw the ball
-    draw(ctx) {
+  // Method to draw the ball
+  draw(ctx) {
 
 ctx.save();
 
@@ -65,3 +65,46 @@ ctx.stroke();
 
 ctx.restore(); 
 }
+
+// Method to rotate the ball
+rotate() {
+          this.angle += this.rotationSpeed; 
+          if (this.angle >= 2 * Math.PI) { 
+              this.angle -= 2 * Math.PI;
+          }
+      }
+
+      // Method to move the ball and handle border collisions
+      move() {
+          this.y += this.yv;
+          this.x += this.xv;
+
+          // Check for collision with the bottom edge
+          if (this.y + this.r >= yBorder) {
+              this.yv *= -1; 
+              this.y = yBorder - this.r; 
+              this.rotationSpeed *= -1; 
+          }
+
+          // Check for collision with the top edge
+          if (this.y - this.r <= 0) {
+              this.yv *= -1; 
+              this.y = this.r; 
+              this.rotationSpeed *= -1; 
+          }
+
+          // Check for collision with the right edge
+          if (this.x + this.r >= xBorder) {
+              this.xv *= -1; 
+              this.x = xBorder - this.r; 
+              this.rotationSpeed *= -1; 
+          }
+
+          // Check for collision with the left edge
+          if (this.x - this.r <= 0) {
+              this.xv *= -1; 
+              this.x = this.r; 
+              this.rotationSpeed *= -1; 
+          }
+      }
+  }

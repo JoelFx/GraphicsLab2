@@ -1,17 +1,39 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>Canvas</title>
-    <style type="text/css">
-        body {
-            background-color: white;
-        }
-        #canvas-for-ball {
-            border: 2px solid black;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Canvas</title>
+  <style type="text/css">
+      body {
+          background-color: white;
+      }
+      #canvas-for-ball {
+          border: 2px solid black;
+      }
+  </style>
 </head>
 <body>
 
 <h1>Joel John</h1>
+
+<canvas id="canvas-for-ball" height="250" width="500"></canvas>
+
+<script type="text/javascript">
+  // Get a handle to the canvas element
+  var canvas = document.getElementById("canvas-for-ball");
+  var ctx = canvas.getContext("2d");
+  
+  var yBorder = canvas.height;
+  var xBorder = canvas.width;
+
+  // Ball class and constructor
+  class Ball {
+      constructor(y, x, r, xv, yv) {
+          this.y = y; 
+          this.x = x; 
+          this.r = r; 
+          this.xv = xv; 
+          this.yv = yv; 
+          this.angle = 0; 
+          this.rotationSpeed = 0.1; 
+      }
